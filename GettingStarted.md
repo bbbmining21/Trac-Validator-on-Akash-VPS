@@ -1,82 +1,136 @@
-# 🧱 Run One or More Akash Trac Validator Nodes on One Server
+# 🧱 Hypermall Validator on Akash (Automated Setup Guide)
 
-> This is a step-by-step guide for running **multiple Trac validator nodes** (`trac-msb`) in **separate user environments** on a single Akash container using **Ubuntu 22.04**. This includes proper persistent storage, login configuration, updates, and node launching.
-
----
-
-## 🔰 What’s This For?
-
-This tutorial helps you:
-
-* Launch a validator node inside Akash Cloud (https://console.akash.network/sdl-builder (click on 'import')).
-* Run **two separate nodes** in the same container.
-* Avoid permission issues and data loss.
-* Use **persistent volumes** so data survives reboots.
-* Understand the full process from **deployment to management**.
+> Run **2 fully automated Hypermall validator nodes** on Akash using a **self-healing runtime container** with persistent storage.
 
 ---
 
-## 📦 0. What Is an SDL?
+# ⚡ 🔍 Quick Overview
 
-SDL stands for **Stack Definition Language**. It’s like a recipe file that tells Akash:
+This setup will:
 
-* What **OS image** to use (`ubuntu:22.04`)
-* What **software** to install when the server boots
-* What **storage**, **CPU**, and **memory** you need
-* What **ports** to expose
-* How to configure users and passwords
+✔️ Deploy a ready-to-run validator environment
 
-You deploy this file clicking on the red 'Deploy' button.
+✔️ Automatically install and start nodes
 
-Please get familiar with the Keplr Wallet (and the COSMOS Ecosystem) beforehand -if you haven´t done this yet-, as payment is done in either $AKT or $USDC (Noble).
+✔️ Recover after container restarts
+
+✔️ Run nodes in the background using `tmux`
 
 ---
 
-## 📋 Example SDL (Your Deployment File)
+## 🧠 For Experienced Cosmos Users
 
-Below is your finalized SDL — ready to deploy:
+👉 You can skip **Step 1 (Wallet & Funding)** if you already:
+
+* Use Keplr Wallet
+* Have funds on the **Akash chain**
+
+➡️ Continue directly with **Step 2 [Understanding the Setup](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/edit/main/GettingStarted.md#-step-2)**
+
+---
+
+# 🔐 Step 1 — Wallet & Funding
+
+## Install Keplr Wallet
+
+👉 [https://www.keplr.app](https://www.keplr.app)
+
+---
+
+## 💰 Fund Your Wallet
+
+### Option A — USDC via Noble
+
+👉 [https://express.noble.xyz/transfer](https://express.noble.xyz/transfer)
+
+**Steps:**
+
+1. Connect wallet
+2. Send USDC → Noble
+3. Funds arrive in Keplr
+
+---
+
+### Option B — Swap to AKT
+
+👉 [https://app.osmosis.zone](https://app.osmosis.zone)
+
+**Steps:**
+
+1. Deposit USDC
+2. Swap → AKT
+3. Withdraw to Akash
+
+---
+
+📸 *Screenshot placeholder:*
+`/images/keplr-wallet.png`
+`/images/osmosis-swap.png`
+
+---
+
+# 📦 Step 2 
+— What You’re Deploying
+
+You are deploying a **prebuilt Docker runtime** that:
+
+* Installs Hypermall automatically
+* Creates user environments
+* Starts validator nodes
+* Restores after restarts
+
+---
+
+## 🔍 (Optional) Verify the Runtime
+
+* Entrypoint script:
+  [https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20Hypermall%20node%20on%20Akash%20with%20docker%20and%20Entrypoint.sh.md](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20Hypermall%20node%20on%20Akash%20with%20docker%20and%20Entrypoint.sh.md)
+
+* Docker image:
+  [https://hub.docker.com/repository/docker/bbbmining21/hypermall-runtime/tags/v0.5](https://hub.docker.com/repository/docker/bbbmining21/hypermall-runtime/tags/v0.5)
+
+---
+
+# 🚀 Step 3 — Deploy Your Node
+
+Go to:
+
+👉 [https://console.akash.network/sdl-builder](https://console.akash.network/sdl-builder)
+
+---
+
+## 📋 Paste This SDL
 
 ```yaml
 version: "2.0"
-
 services:
-  ubuntu:
-    image: ubuntu:22.04
-    command:
-      - /bin/bash
-      - -c
-      - |
-        apt-get update && apt-get install -y openssh-server && \
-        mkdir /var/run/sshd && \
-        sed -i 's/^#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-        sed -i 's/^#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
-        echo 'root:AssignRootPasswordHere' | chpasswd && \
-        useradd -m -s /bin/bash UnnamedPlayer1 && \
-        echo 'UnnamedPlayer1:AssignPasswordHere' | chpasswd && \
-        useradd -m -s /bin/bash UnnamedPlayer2 && \
-        echo 'UnnamedPlayer2:AssignPasswordHere' | chpasswd && \
-        service ssh start && \
-        tail -f /dev/null
+  hypermall-test-runtime:
+    image: bbbmining21/hypermall-runtime:v0.5
     expose:
       - port: 22
         as: 22
         to:
           - global: true
+    env:
+      - ROOT_PASSWORD=supersecret
+      - USER1_PASSWORD=user1secret
+      - USER2_PASSWORD=user2secret
     params:
       storage:
         data:
           mount: /data
+          readOnly: false
 
 profiles:
   compute:
-    ubuntu:
+    hypermall-test-runtime:
       resources:
         cpu:
           units: 8
         memory:
           size: 16Gi
         storage:
-          - size: 20Gi
+          - size: 50Gi
           - name: data
             size: 500Gi
             attributes:
@@ -86,174 +140,258 @@ profiles:
   placement:
     dcloud:
       pricing:
-        ubuntu:
+        hypermall-test-runtime:
           denom: uakt
           amount: 10000
 
 deployment:
-  ubuntu:
+  hypermall-test-runtime:
     dcloud:
-      profile: ubuntu
+      profile: hypermall-test-runtime
       count: 1
 ```
 
-### 🔐 Replace the Passwords
-
-Replace:
-
-* `AssignRootPasswordHere` → your root password
-* `AssignPasswordHere` → each user’s login password (choose something secure)
-
 ---
 
-## 🧰 1. First Time Setup (as `root` in Akash container)
-
-After SSH’ing into your container as `root`, run:
+## 🔐 🚨 Change Passwords Before Deploying
 
 ```bash
-apt update && apt install -y \
-  curl git build-essential python3 tmux
-```
-
-Install Node.js:
-
-```bash
-curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-apt install -y nodejs
+ROOT_PASSWORD=yourpassword
+USER1_PASSWORD=yourpassword
+USER2_PASSWORD=yourpassword
 ```
 
 ---
 
-## 🗂 2. Create Project Directories
+📸 *Screenshot placeholder:*
+`/images/akash-sdl-builder.png`
 
-Make persistent folders for your validator nodes:
+---
+
+## ▶️ Deploy
+
+* Click **Deploy**
+* Approve transaction
+* Wait ~2–5 minutes
+
+---
+
+# 🔌 Step 4 — Connect to Server
 
 ```bash
-mkdir -p /data/trac-validator/UnnamedPlayer1
-mkdir -p /data/trac-validator/UnnamedPlayer2
-
-chown -R UnnamedPlayer1:UnnamedPlayer1 /data/trac-validator/UnnamedPlayer1
-chown -R UnnamedPlayer2:UnnamedPlayer2 /data/trac-validator/UnnamedPlayer2
+ssh root@YOUR_IP
 ```
 
 ---
 
-## 📦 3. Install `trac-msb` Validator (as `root`, once per user)
-
-Repeat this block for **each user’s folder**:
-
-```bash
-cd /data/trac-validator/UnnamedPlayer1
-npm init -y
-npm install trac-msb
-cp -fr node_modules/trac-msb/* .
-npm install
-```
-
-And then for user 2:
-
-```bash
-cd /data/trac-validator/UnnamedPlayer2
-npm init -y
-npm install trac-msb
-cp -fr node_modules/trac-msb/* .
-npm install
-```
-
-✅ This installs the validator directly into persistent storage. Do **not** install outside of `/data` — it will be deleted on reboot.
+📸 *Screenshot placeholder:*
+`/images/ssh-login1.png`
+`/images/ssh-login2.png`
+`/images/ssh-login3.png`
 
 ---
 
-## 🔒 4. Fix Permissions
+# 🧵 Step 5 — tmux Sessions
+What Is tmux?
+---
+Your nodes run inside **tmux sessions**.
+
+👉 tmux allows processes to run in the background:
+
+* Close terminal → node keeps running
+* Disconnect SSH → node keeps running
+
+
+Command to list tmux sessions:
 
 ```bash
-chmod -R ugo+rwX /data/trac-validator
+tmux ls
 ```
 
-This ensures all users can read/write everything they need.
+Expected:
+
+```bash
+mall1
+mall2
+```
 
 ---
 
-## 🧵 5. Start Validator Nodes via `tmux`
-
-Since `pm2` and other tools may fail in Akash containers, use `tmux` to run each node in its own terminal tab in the background.
-
-### For UnnamedPlayer1
+## ▶️ Attach (Connect to your tmux session, where your node is either already running or needs to be run)
 
 ```bash
-su - UnnamedPlayer1
-cd /data/trac-validator/UnnamedPlayer1
-tmux new -s msb1
+tmux attach -t mall1
+```
+Inside User1
+
+Respectively
+
+```bash
+tmux attach -t mall2
+```
+Inside User2
+
+These commands are not to be run under root. So respectively, for each user, open two new windows in your terminal and log into them to interact with the corresponding tmux instance (mall1 for User1 and mall2 for User2) 
+
+---
+
+## ⏹ Detach (Go back to the terminal without closing your node)
+
+```
+Ctrl + b, then d
+```
+
+---
+
+📸 *Screenshot placeholder:*
+`/images/tmux-session.png`
+
+---
+
+# 📌 Step 6 — Identity Setup
+
+When starting for the first time:
+
+---
+
+## 🆕 Create New Identity
+
+```bash
+1
+```
+
+✔ Creates new validator address
+✔ Needed for onboarding
+📸 *Screenshot placeholder:*
+`/images/msb-seed.png`
+
+---
+
+## 🔁 Restore Existing Identity
+
+```bash
+2
+```
+
+Then:
+
+* Paste 24-word seed phrase
+* Press Enter
+
+---
+## 🔐 Backup Identity
+
+```bash
+cp stores/store1/db/keypair.json /your/backup/location/
+```
+---
+
+# 🧵 tmux Recovery (If Closed Accidentally)
+
+Reattach:
+
+```bash
+tmux attach -t mall1
+```
+
+---
+
+## If Session Is Gone
+
+```bash
+su - User1
+cd /data/hypermall/User1
 node msb.mjs run . store1
 ```
 
-Detach from `tmux`: press `Ctrl + b`, then `d`
+## ⛔ Important Rule
 
-### For UnnamedPlayer2
+* mall1 → store1
+* mall2 → store2
+* Never run same store twice⚠️ It will cause an error.
+
+---
+
+# 🧾 Step 7 — Whitelisting
+
+👉 [https://onboarding.trac.network](https://onboarding.trac.network)
+
+---
+
+## Steps:
+
+1. Connect Bitcoin wallet
+2. Link license → MSB identity
+3. Wait up to 24h
+
+---
+
+## Final Step
 
 ```bash
-su - UnnamedPlayer2
-cd /data/trac-validator/UnnamedPlayer2
-tmux new -s msb2
-node msb.mjs run . store2
+/add_writer
 ```
 
 ---
 
-## 🔄 How to Update `trac-msb`
+📸 *Screenshot placeholder:*
+`/images/onboarding.png`
 
-1. Reconnect via SSH.
+---
 
-2. Attach to the `tmux` session and stop the node with `Ctrl + C`:
+# 💰 You’re Live
 
-   ```bash
-   tmux attach -t msb1
-   # Press Ctrl+C
-   ```
+* Node validates trades
+* Fees accumulate
+* Uptime = earnings
 
-3. Then run the update steps:
+---
 
-```bash
-cd /data/trac-validator/UnnamedPlayer1
-npm install trac-msb
-cp -fr node_modules/trac-msb/* .
-npm install
+# 🧠 Summary
 
-cd /data/trac-validator/UnnamedPlayer2
-npm install trac-msb
-cp -fr node_modules/trac-msb/* .
-npm install
+| Component      | Role                 |
+| -------------- | -------------------- |
+| Keplr          | Wallet               |
+| Akash          | Compute/Cloud/Server |
+| Docker runtime | Automation           |
+| /data          | Persistent storage   |
+| tmux           | Background execution |
+| MSB            | Hypermall Validator  |
+
+---
+
+# ⚠️ Why is Persistent Storage added (Important)
+
+Akash containers are **ephemeral**:
+
+* `/root`, `/home` → wiped
+* `/data` → persistent
+
+👉 Your node stores everything in `/data` and **auto-recovers**
+---
+
+# 🔚 Final Notes
+
+This setup is:
+
+* ⚡ Automated
+* 🔁 Self-recovering
+* 🧵 Background-managed
+* 🔐 Identity-safe
+
+---
+# 📸 Suggested Screenshot List
+
+Create an `/images` folder with:
+
+```
+keplr-wallet.png
+osmosis-swap.png
+akash-sdl-builder.png
+ssh-login.png
+tmux-session.png
+msb-seed.png
+onboarding.png
 ```
 
-4. Relaunch the node with the same `node` command in its `tmux` session.
-
 ---
-
-## 📁 Why Everything Goes Into `/data/`
-
-Akash containers **wipe all files** from paths like:
-
-* `/root/`
-* `/home/`
-* `/tmp/`
-
-But `/data/` is **persistent** thanks to your SDL config. That’s why:
-
-* All `npm install` commands go inside `/data`
-* The validator runs **only** from `/data`
-* RocksDB and key files stay safe across reboots
-
----
-
-## 🧠 Summary
-
-| Task                                | Why                                         |
-| ----------------------------------- | ------------------------------------------- |
-| SDL sets up Ubuntu + users          | Defines your Akash container setup          |
-| Everything goes in `/data`          | Akash wipes other folders                   |
-| Use `tmux`                          | Lightweight way to run background processes |
-| Avoid shared stores like `stores2/` | Prevents file permission conflicts          |
-
----
-
-After the set up is done and your node is running, please continue with the steps from here https://docs.trac.network/documentation/validators/installation/hypermall#post-install
