@@ -63,9 +63,8 @@ This setup will:
 
 ---
 
-📸 *Screenshot placeholder:*
-`/images/keplr-wallet.png`
-`/images/osmosis-swap.png`
+![Keplr Wallet](/images/keplr-wallet.png)
+![Osmosis Swap](/images/osmosis-swap.png)
 
 ---
 
@@ -162,9 +161,7 @@ USER2_PASSWORD=yourpassword
 ```
 
 ---
-
-📸 *Screenshot placeholder:*
-`/images/akash-sdl-builder.png`
+![Akash SDL Builder](/images/akash-sdl-builder.png)
 
 ---
 
@@ -183,11 +180,9 @@ ssh root@YOUR_IP
 ```
 
 ---
-
-📸 *Screenshot placeholder:*
-`/images/ssh-login1.png`
-`/images/ssh-login2.png`
-`/images/ssh-login3.png`
+![SSH Login data source1](/images/ssh-login1.png)
+![SSH Login data source2](/images/ssh-login2.png)
+![SSH Login over terminal like MobaXterm](/images/ssh-login3.png)
 
 ---
 
@@ -242,10 +237,7 @@ Ctrl + b, then d
 ```
 
 ---
-
-📸 *Screenshot placeholder:*
-`/images/tmux-session.png`
-
+![How a tmux session might look like](/images/tmux-session.png)
 ---
 
 # 📌 Step 6 — Identity Setup
@@ -262,8 +254,8 @@ When starting for the first time:
 
 ✔ Creates new validator address
 ✔ Needed for onboarding
-📸 *Screenshot placeholder:*
-`/images/msb-seed.png`
+
+![Copy the seed phrase!](/images/msb-seed.png)
 
 ---
 
@@ -333,10 +325,7 @@ node msb.mjs run . store1
 ```
 
 ---
-
-📸 *Screenshot placeholder:*
-`/images/onboarding.png`
-
+![Successfully running the node](/images/onboarding.png)
 ---
 
 # 💰 You’re Live
@@ -378,20 +367,3 @@ This setup is:
 * 🔁 Self-recovering
 * 🧵 Background-managed
 * 🔐 Identity-safe
-
----
-# 📸 Suggested Screenshot List
-
-Create an `/images` folder with:
-
-```
-keplr-wallet.png
-osmosis-swap.png
-akash-sdl-builder.png
-ssh-login.png
-tmux-session.png
-msb-seed.png
-onboarding.png
-```
-
----
