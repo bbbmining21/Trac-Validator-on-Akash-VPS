@@ -92,20 +92,25 @@ if [ ! -f "$INIT_FILE" ]; then
 fi
 
 # -------- install Hypermall node --------
-su - User1 << 'EOF'
+su - User1 << EOF
 cd /data/hypermall/User1
 
 if [ ! -f "msb.mjs" ]; then
     echo "Installing Hypermall node (trac-msb@0.1.82)..."
+
+    # Install NVM and Node 22
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
-    source ~/.nvm/nvm.sh
+    export NVM_DIR="\$HOME/.nvm"
+    [ -s "\$NVM_DIR/nvm.sh" ] && \. "\$NVM_DIR/nvm.sh"
     nvm install 22
 
+    # Install npm packages
     npm install -g pear
+    npm init -y
     npm install trac-msb@0.1.82
 
+    # Copy node modules for validator
     cp -r node_modules/trac-msb/* .
-    npm install
 else
     echo "Hypermall already installed"
 fi
