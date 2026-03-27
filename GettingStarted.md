@@ -98,7 +98,60 @@ Go to:
 
 ---
 
-## 📋 Paste This SDL
+## 📋 Paste This SDL for ONE node
+
+```yaml
+version: "2.0"
+
+services:
+  runtime:
+    image: bbbmining21/hypermall-runtime:v0.2
+    env:
+      - "ROOT_PASSWORD=supersecret"
+      - "USER1_PASSWORD=user1secret"
+    expose:
+      - port: 22
+        as: 22
+        to:
+          - global: true
+    params:
+      storage:
+        data:
+          mount: /data
+
+profiles:
+  compute:
+    runtime:
+      resources:
+        cpu:
+          units: 8
+        memory:
+          size: 16Gi
+        storage:
+          - size: 50Gi
+          - name: data
+            size: 500Gi
+            attributes:
+              persistent: true
+              class: beta3
+
+  placement:
+    dcloud:
+      pricing:
+        runtime:
+          denom: uakt
+          amount: 10000
+
+deployment:
+  runtime:
+    dcloud:
+      profile: runtime
+      count: 1
+```
+---
+## OR
+
+## 📋 Paste This SDL for TWO nodes
 
 ```yaml
 version: "2.0"
@@ -205,6 +258,10 @@ tmux ls
 
 Expected:
 
+```bash
+hypermall
+```
+# OR with two nodes
 ```bash
 mall1
 mall2
