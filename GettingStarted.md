@@ -140,8 +140,8 @@ profiles:
     dcloud:
       pricing:
         hypermall-test-runtime:
-          denom: uakt
-          amount: 10000
+          denom: uact
+          amount: 1000
 
 deployment:
   hypermall-test-runtime:
