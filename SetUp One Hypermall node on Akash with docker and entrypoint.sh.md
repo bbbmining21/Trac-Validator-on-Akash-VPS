@@ -101,7 +101,7 @@ if [ ! -f "msb.mjs" ]; then
     nvm install 22
 
     npm install -g pear
-    npm install [email protected]  # pinned for Hypermall validator
+    npm install trac-msb@0.1.82  # pinned for Hypermall validator
 
     cp -r node_modules/trac-msb/* .
     npm install
@@ -142,7 +142,7 @@ version: "2.0"
 
 services:
   runtime:
-    image: bbbmining21/hypermall-runtime:v0.1
+    image: YOUR_DOCKERHUB_USERNAME/hypermall-runtime:latest
     env:
       - "ROOT_PASSWORD=supersecret"
       - "USER1_PASSWORD=user1secret"
@@ -176,8 +176,8 @@ profiles:
     dcloud:
       pricing:
         runtime:
-          denom: uact
-          amount: 1000
+          denom: uakt
+          amount: 10000
 
 deployment:
   runtime:
