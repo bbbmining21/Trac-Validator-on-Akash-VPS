@@ -145,7 +145,7 @@ profiles:
 deployment:
   runtime:
     dcloud:
-      profile: runtime
+      profile: hypermall-runtime-one-node
       count: 1
 ```
 ---
@@ -199,7 +199,7 @@ profiles:
 deployment:
   hypermall-test-runtime:
     dcloud:
-      profile: hypermall-test-runtime
+      profile: hypermall-runtime-two-nodes
       count: 1
 ```
 
