@@ -134,10 +134,10 @@ exec /usr/sbin/sshd -D
 
 ```bash
 # Build the Docker image from scratch, ignoring cache
-docker build --no-cache -t bbbmining21/hypermall-runtime:v0.1 .
+docker build --no-cache -t bbbmining21/hypermall-runtime:v0.2 .
 
 # Push the newly built image to Docker Hub
-docker push bbbmining21/hypermall-runtime:v0.1
+docker push bbbmining21/hypermall-runtime:v0.2
 ```
 ---
 
