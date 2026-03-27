@@ -60,27 +60,28 @@ Create `entrypoint.sh`:
 
 ```
 #!/bin/bash
-set +e
+set -e
 
 INIT_FILE="/data/.initdone"
 
 echo "=== Hypermall runtime container boot ==="
 
-# Ensure persistent disk
+# -------- persistent disk --------
 mkdir -p /data
 chmod 777 /data || true
 
-# -------- set passwords first --------
+# -------- check environment variables --------
 if [ -z "$ROOT_PASSWORD" ] || [ -z "$USER1_PASSWORD" ]; then
     echo "ERROR: ROOT_PASSWORD or USER1_PASSWORD not set"
     exit 1
 fi
 
+# -------- set passwords --------
 echo "root:${ROOT_PASSWORD}" | chpasswd
 echo "User1:${USER1_PASSWORD}" | chpasswd
 
-# -------- restart SSH after passwords set --------
-service ssh restart || service ssh start || true
+# -------- ensure User1 home directory --------
+id -u User1 >/dev/null 2>&1 || useradd -m -s /bin/bash User1
 
 # -------- first boot init --------
 if [ ! -f "$INIT_FILE" ]; then
@@ -101,7 +102,7 @@ if [ ! -f "msb.mjs" ]; then
     nvm install 22
 
     npm install -g pear
-    npm install trac-msb@0.1.82  # pinned for Hypermall validator
+    npm install trac-msb@0.1.82
 
     cp -r node_modules/trac-msb/* .
     npm install
@@ -119,8 +120,13 @@ else
 fi
 EOF
 
-# Keep container alive
-tail -f /dev/null
+# -------- configure SSH for root login --------
+sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config
+sed -i 's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
+
+echo "Starting SSH daemon in foreground (root login enabled)..."
+exec /usr/sbin/sshd -D
 ```
 ---
 
