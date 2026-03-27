@@ -139,8 +139,8 @@ profiles:
     dcloud:
       pricing:
         runtime:
-          denom: uakt
-          amount: 10000
+          denom: uact
+          amount: 1000
 
 deployment:
   runtime:
