@@ -222,3 +222,4 @@ deployment:
 tmux attach -t hypermall
 tmux attach -t TNK1
 ```
+Detach: Ctrl + B, then D
