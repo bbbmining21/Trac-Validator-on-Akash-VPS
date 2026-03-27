@@ -19,41 +19,39 @@ FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install dependencies
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    openssh-server \
-    sudo \
-    curl \
-    wget \
-    git \
-    nano \
-    npm \
-    tmux \
+    curl git tmux nano ca-certificates \
+    openssh-server build-essential python3 \
+    apt-transport-https \
     && rm -rf /var/lib/apt/lists/*
 
+# NodeJS 20
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+ && apt-get install -y nodejs
+
+# Prepare SSH runtime
 RUN mkdir /var/run/sshd
 
-# Create ONLY User1
-RUN useradd -m -s /bin/bash user1 && \
-    usermod -aG sudo user1
+# Create only User1
+RUN useradd -m -s /bin/bash User1
 
-# Prepare persistent storage
-RUN mkdir -p /data/hypermall/User1 && chown -R user1:user1 /data
+# Enable root login with password and fix PAM
+RUN sed -i 's/^#PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^#PasswordAuthentication.*/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^UsePAM yes/UsePAM no/' /etc/ssh/sshd_config
 
-WORKDIR /home/user1
+# Prepare persistent data directory
+RUN mkdir -p /data/hypermall/User1 && chown -R User1:User1 /data
 
-# Copy Entrypoint
-COPY Entrypoint.sh /Entrypoint.sh
-RUN chmod +x /Entrypoint.sh
+# Copy entrypoint
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Expose SSH
 EXPOSE 22
 
-# Enable root login via SSH with password
-RUN sed -i 's/^#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
-    sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
-
-ENTRYPOINT ["/Entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]
 ```
 ---
 ## 3️⃣ Entrypoint script
@@ -62,55 +60,63 @@ Create `Entrypoint.sh`:
 
 ```
 #!/bin/bash
+set +e
 
-echo "=== Hypermall Runtime (Single User: User1) ==="
+INIT_FILE="/data/.initdone"
 
-# Validate environment variables
+echo "=== Hypermall runtime container boot ==="
+
+# Ensure persistent disk
+mkdir -p /data
+chmod 777 /data || true
+
+# -------- set passwords first --------
 if [ -z "$ROOT_PASSWORD" ] || [ -z "$USER1_PASSWORD" ]; then
-  echo "ERROR: ROOT_PASSWORD or USER1_PASSWORD not set"
-  exit 1
+    echo "ERROR: ROOT_PASSWORD or USER1_PASSWORD not set"
+    exit 1
 fi
 
-# Set root and User1 passwords
-echo "root:$ROOT_PASSWORD" | chpasswd
-echo "user1:$USER1_PASSWORD" | chpasswd
+echo "root:${ROOT_PASSWORD}" | chpasswd
+echo "User1:${USER1_PASSWORD}" | chpasswd
 
-# Start SSH service
-service ssh start
+# -------- restart SSH after passwords set --------
+service ssh restart || service ssh start || true
 
-# Prepare persistent storage
-mkdir -p /data/hypermall/User1
-chown -R user1:user1 /data
+# -------- first boot init --------
+if [ ! -f "$INIT_FILE" ]; then
+    echo "Initializing Hypermall directory for User1"
+    mkdir -p /data/hypermall/User1
+    chown -R User1:User1 /data/hypermall/User1
+    touch "$INIT_FILE"
+fi
 
-# Switch to User1 environment
-su - user1 << 'EOF'
-
+# -------- install Hypermall node --------
+su - User1 << 'EOF'
 cd /data/hypermall/User1
 
-# Install Hypermall node only if not present
 if [ ! -f "msb.mjs" ]; then
-  echo "Installing Hypermall node (trac-msb@0.1.82)..."
+    echo "Installing Hypermall node (trac-msb@0.1.82)..."
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
+    source ~/.nvm/nvm.sh
+    nvm install 22
 
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.2/install.sh | bash
-  source ~/.nvm/nvm.sh
-  nvm install 22
+    npm install -g pear
+    npm install [email protected]  # pinned for Hypermall validator
 
-  npm install -g pear
-  npm install trac-msb@0.1.82  # PINNED for Hypermall
-
-  cp -r node_modules/trac-msb/* .
-  npm install
-fi
-
-# Start validator in a single tmux session
-if ! tmux has-session -t hypermall 2>/dev/null; then
-  echo "Starting tmux session 'hypermall'..."
-  tmux new-session -d -s hypermall \
-    "cd /data/hypermall/User1 && node msb.mjs run . store1"
+    cp -r node_modules/trac-msb/* .
+    npm install
 else
-  echo "Tmux session 'hypermall' already running"
+    echo "Hypermall already installed"
 fi
 
+# -------- start validator in tmux --------
+if ! tmux has-session -t hypermall 2>/dev/null; then
+    echo "Starting tmux session 'hypermall'..."
+    tmux new-session -d -s hypermall \
+    "cd /data/hypermall/User1 && while true; do node msb.mjs run . store1; sleep 5; done"
+else
+    echo "Tmux session 'hypermall' already running"
+fi
 EOF
 
 # Keep container alive
