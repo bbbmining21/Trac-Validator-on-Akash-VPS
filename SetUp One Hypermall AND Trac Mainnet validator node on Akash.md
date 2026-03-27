@@ -216,3 +216,9 @@ deployment:
       profile: runtime
       count: 1
 ```
+## Attach Sessions
+
+```
+tmux attach -t hypermall
+tmux attach -t TNK1
+```
