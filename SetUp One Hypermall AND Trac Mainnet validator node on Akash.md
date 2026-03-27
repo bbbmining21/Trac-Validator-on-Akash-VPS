@@ -218,7 +218,7 @@ deployment:
 ```
 ## Attach Sessions
 
-```
+```bash
 tmux attach -t hypermall
 tmux attach -t TNK1
 ```
