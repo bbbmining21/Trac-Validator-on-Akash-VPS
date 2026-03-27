@@ -148,7 +148,7 @@ version: "2.0"
 
 services:
   runtime:
-    image: YOUR_DOCKERHUB_USERNAME/hypermall-runtime:latest
+    image: bbbmining21/hypermall-runtime:v0.2
     env:
       - "ROOT_PASSWORD=supersecret"
       - "USER1_PASSWORD=user1secret"
