@@ -14,10 +14,11 @@ cd hypermall-runtime
 
 Create `Dockerfile`:
 
-```Dockerfile
+```
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND=noninteractive
+
 # Install dependencies
 RUN apt-get update && apt-get install -y \
     openssh-server \
@@ -36,30 +37,35 @@ RUN mkdir /var/run/sshd
 RUN useradd -m -s /bin/bash user1 && \
     usermod -aG sudo user1
 
+# Prepare persistent storage
+RUN mkdir -p /data/hypermall/User1 && chown -R user1:user1 /data
+
 WORKDIR /home/user1
 
+# Copy Entrypoint
 COPY Entrypoint.sh /Entrypoint.sh
 RUN chmod +x /Entrypoint.sh
 
-# Persistent data directory
-RUN mkdir -p /data/hypermall/User1 && chown -R user1:user1 /data
-
 # Expose SSH
 EXPOSE 22
+
+# Enable root login via SSH with password
+RUN sed -i 's/^#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config && \
+    sed -i 's/^PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config
 
 ENTRYPOINT ["/Entrypoint.sh"]
 ```
 ---
 ## 3️⃣ Entrypoint script
 
-Create `entrypoint.sh`:
+Create `Entrypoint.sh`:
 
 ```
 #!/bin/bash
 
 echo "=== Hypermall Runtime (Single User: User1) ==="
 
-# Ensure passwords are set
+# Validate environment variables
 if [ -z "$ROOT_PASSWORD" ] || [ -z "$USER1_PASSWORD" ]; then
   echo "ERROR: ROOT_PASSWORD or USER1_PASSWORD not set"
   exit 1
@@ -90,7 +96,7 @@ if [ ! -f "msb.mjs" ]; then
   nvm install 22
 
   npm install -g pear
-  npm install trac-msb@0.1.82   # <-- PINNED version for Hypermall
+  npm install trac-msb@0.1.82  # PINNED for Hypermall
 
   cp -r node_modules/trac-msb/* .
   npm install
