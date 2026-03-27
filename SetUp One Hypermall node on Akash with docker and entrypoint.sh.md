@@ -189,13 +189,13 @@ tmux ls
 Expected output:
 
 ```
-mall1
+hypermall
 ```
 
 4. Attach to a validator session:
 
 ```bash
-tmux attach -t mall1
+tmux attach -t hypermall
 ```
 
 5. Node logs are visible. Validators are running inside the correct `/data/hypermall/UserX` directories.
