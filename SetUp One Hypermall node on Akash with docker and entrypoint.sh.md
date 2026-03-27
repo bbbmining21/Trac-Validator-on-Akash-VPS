@@ -56,7 +56,7 @@ ENTRYPOINT ["/entrypoint.sh"]
 ---
 ## 3️⃣ Entrypoint script
 
-Create `Entrypoint.sh`:
+Create `entrypoint.sh`:
 
 ```
 #!/bin/bash
