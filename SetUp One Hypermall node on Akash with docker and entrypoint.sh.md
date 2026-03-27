@@ -121,7 +121,10 @@ tail -f /dev/null
 ## 4️⃣ Build and push Docker image
 
 ```bash
-docker build -t bbbmining21/hypermall-runtime:v0.1 .
+# Build the Docker image from scratch, ignoring cache
+docker build --no-cache -t bbbmining21/hypermall-runtime:v0.1 .
+
+# Push the newly built image to Docker Hub
 docker push bbbmining21/hypermall-runtime:v0.1
 ```
 ---
