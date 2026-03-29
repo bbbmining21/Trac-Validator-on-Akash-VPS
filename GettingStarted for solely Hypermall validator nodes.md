@@ -62,6 +62,7 @@ This setup will:
 
 ☝🏼You aswell can fund your wallet with credit card, if you don´t care about KYC and privacy☝🏼
 For that you will have to create a new account and log in.
+
 [Sign In](https://console.akash.network/login?tab=login&returnTo=%2F)
 ![Sign In](/images/console-sign-in.png)
 ---
