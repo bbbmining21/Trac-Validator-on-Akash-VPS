@@ -286,7 +286,7 @@ tmux attach -t TNK1
 ```
 Inside User1
 
-
+-
 
 Respectively
 
