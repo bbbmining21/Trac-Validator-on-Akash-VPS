@@ -62,7 +62,7 @@ This setup will:
 
 # ☝🏼You aswell can fund your wallet with credit card, if you don´t care about KYC and privacy☝🏼
 For that you will have to create a new account and log in.
-For that you can [Sign In](https://console.akash.network/login?tab=login&returnTo=%2F) here
+Just [Sign In](https://console.akash.network/login?tab=login&returnTo=%2F) here
 Skip signing in and just connect your Keplr wallet, if you don´t wanna pay in fiat!
 
 ![Sign In](/images/console-sign-in.png)
