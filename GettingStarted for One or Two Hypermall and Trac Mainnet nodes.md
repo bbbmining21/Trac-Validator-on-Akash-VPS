@@ -432,7 +432,7 @@ node msb.mjs run . store3
 | /data          | Persistent storage   |
 | tmux           | Background execution |
 | MSB            | Hypermall Validator  |
-                 | Trac Validator       |
+|                | Trac Validator       |
 ---
 
 # ⚠️ Why is Persistent Storage added (Important)
