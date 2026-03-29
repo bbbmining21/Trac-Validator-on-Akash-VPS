@@ -1,6 +1,6 @@
 # 🧱 Hypermall Validator on Akash (Automated Setup Guide)
 
-> Run **2 fully automated Hypermall validator nodes** on Akash using a **self-healing runtime container** with persistent storage.
+> Run **one or two fully automated Hypermall validator nodes** on Akash using a **self-healing runtime container** with persistent storage.
 
 ---
 
@@ -60,11 +60,13 @@ This setup will:
 1. Deposit USDC
 2. Swap → AKT
 3. Withdraw to Akash
+4. Mint ACT
 
 ---
 
 ![Keplr Wallet](/images/keplr-wallet.png)
 ![Osmosis Swap](/images/osmosis-swap.png)
+![Mint ACT](/images/mint-ACT.png)
 
 ---
 
@@ -83,11 +85,11 @@ You are deploying a **prebuilt Docker runtime** that:
 ## 🔍 (Optional) Verify the Runtime
 
 * Entrypoint script:
-  [https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20Hypermall%20node%20on%20Akash%20with%20docker%20and%20Entrypoint.sh.md](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20Hypermall%20node%20on%20Akash%20with%20docker%20and%20Entrypoint.sh.md)
+  [Entrypoint](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20Hypermall%20node%20on%20Akash%20with%20docker%20and%20Entrypoint.sh.md)
 
 * Docker image:
-  [https://hub.docker.com/repository/docker/bbbmining21/hypermall-runtime/tags/v0.5](https://hub.docker.com/repository/docker/bbbmining21/hypermall-runtime/tags/v0.5)
-
+  [Docker Image1](https://hub.docker.com/repository/docker/bbbmining21/hypermall-runtime/tags/v0.2)
+  [Docker Image2](https://hub.docker.com/repository/docker/bbbmining21/hypermall-runtime/tags/v0.5)
 ---
 
 # 🚀 Step 3 — Deploy Your Node
@@ -222,7 +224,7 @@ USER2_PASSWORD=yourpassword
 
 * Click **Deploy**
 * Approve transaction
-* Wait ~2–5 minutes
+* Wait ~2 minutes
 
 ---
 
