@@ -104,6 +104,8 @@ Go to:
 
 👉 [https://console.akash.network/sdl-builder](https://console.akash.network/sdl-builder)
 
+Click on "Import"
+
 ---
 
 ## 📋 Paste This SDL for ONE node
