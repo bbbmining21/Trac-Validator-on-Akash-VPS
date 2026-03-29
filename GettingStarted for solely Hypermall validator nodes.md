@@ -60,6 +60,8 @@ This setup will:
 3. Withdraw to Akash
 4. Mint ACT
 
+☝🏼You aswell can fund your wallet with credit card, if you don´t care about KYC and privacy☝🏼
+For that you will have to create a new account and log in.
 ---
 
 ![Keplr Wallet](/images/keplr-wallet.png)
