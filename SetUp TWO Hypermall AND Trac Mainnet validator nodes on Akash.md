@@ -294,7 +294,7 @@ tmux attach -t TNK2
 Detach:
 
 ```
-CTRL + B, then D
+CTRL + B, then D (simultanuously)
 ```
 
 ---
