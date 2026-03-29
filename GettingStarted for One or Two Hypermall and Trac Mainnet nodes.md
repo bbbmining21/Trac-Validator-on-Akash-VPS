@@ -25,7 +25,7 @@ This setup will:
 * Use Keplr Wallet
 * Have funds on the **Akash chain**
 
-➡️ Continue directly with **Step 2 [Understanding the Setup](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/GettingStarted%20for%20solely%20Hypermall%20validator%20nodes.md#-step-2)**
+➡️ Continue directly with **Step 2 [Understanding the Setup](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/GettingStarted%20for%20One%20or%20Two%20Hypermall%20and%20Trac%20Mainnet%20nodes.md#-step-2)**
 
 ---
 
