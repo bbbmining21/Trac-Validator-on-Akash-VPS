@@ -286,6 +286,8 @@ tmux attach -t TNK1
 ```
 Inside User1
 
+
+
 Respectively
 
 ```bash
@@ -297,7 +299,7 @@ tmux attach -t TNK2
 ```
 Inside User2
 
-These commands are **not to be run under root**. So respectively, for each user, open two new windows in your terminal and log into them to interact with the corresponding tmux instance (mall1 for User1 and mall2 for User2) 
+These commands are **not to be run under root**. So respectively, for each user, open two new windows in your terminal and log into them to interact with the corresponding tmux instance (e.g. hypermall1 for User1 and hypermall2 for User2) 
 
 ---
 
