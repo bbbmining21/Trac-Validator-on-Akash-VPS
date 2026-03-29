@@ -37,9 +37,9 @@ This setup will:
 
 ---
 
-## 💰 Fund Your Wallet
+## 💰 Fund Your Wallet (Example given with USDC but you can also deposit BTC directly to Osmosis)
 
-### Option A — USDC via Noble
+### USDC via Noble
 
 👉 [https://express.noble.xyz/transfer](https://express.noble.xyz/transfer)
 
@@ -49,9 +49,7 @@ This setup will:
 2. Send USDC → Noble
 3. Funds arrive in Keplr
 
----
-
-### Option B — Swap to AKT
+### Swap to AKT
 
 👉 [https://app.osmosis.zone](https://app.osmosis.zone)
 
@@ -85,7 +83,8 @@ You are deploying a **prebuilt Docker runtime** that:
 ## 🔍 (Optional) Verify the Runtime
 
 * Entrypoint script:
-  [Entrypoint](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20Hypermall%20node%20on%20Akash%20with%20docker%20and%20Entrypoint.sh.md)
+  [Entrypoint1](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20Hypermall%20node%20on%20Akash%20with%20docker%20and%20Entrypoint.sh.md)
+  [Entrypoint2](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20Two%20Hypermall%20nodes%20on%20Akash%20with%20docker%20and%20Entrypoint.sh.md)
 
 * Docker image:
   [Docker Image1](https://hub.docker.com/repository/docker/bbbmining21/hypermall-runtime/tags/v0.2)
