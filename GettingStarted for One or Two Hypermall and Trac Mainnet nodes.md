@@ -305,9 +305,8 @@ These commands are **not to be run under root**. So respectively, for each user,
 
 ## ⏹ Detach (Go back to the terminal without closing your node)
 
-```
-Ctrl + b, then d
-```
+
+Ctrl + b, then d *simultanuously*
 
 ---
 ![How a tmux session might look like](/images/tmux-session.png)
