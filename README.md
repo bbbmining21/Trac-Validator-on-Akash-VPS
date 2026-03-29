@@ -77,6 +77,10 @@ It includes:
 
 So you don’t have to start from zero.
 
+*Don´t be scared of trying out this node installment method! It may all seem difficult at first glance, but you actually just copy paste a couple lines, change your password, click a couple times and then just either create a new wallet or import your seed phrase and you´re done.*
+
+*As long as your server is funded, the validator runs all by itself indefinitely (until there´s an update for the Hypermall or Mainnet node runtime)*
+
 ---
 
 ## Bottom line
