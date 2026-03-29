@@ -366,7 +366,7 @@ node msb.mjs run . store1
 
 # 🧾 Step 7 — Whitelisting
 
-👉 [https://onboarding.trac.network](https://onboarding.trac.network)
+👉 [Onboarding with your license](https://onboarding.tracvalidator.com)
 
 ---
 
