@@ -391,7 +391,7 @@ node msb.mjs run . store3
 
 # 🧾 Step 7 — Whitelisting
 
-👉 [https://onboarding.trac.network](https://onboarding.trac.network)
+👉 [Onboard with your license](https://onboarding.tracvalidator.com)
 
 ---
 
@@ -432,7 +432,7 @@ node msb.mjs run . store3
 | /data          | Persistent storage   |
 | tmux           | Background execution |
 | MSB            | Hypermall Validator  |
-
+                 | Trac Validator       |
 ---
 
 # ⚠️ Why is Persistent Storage added (Important)
