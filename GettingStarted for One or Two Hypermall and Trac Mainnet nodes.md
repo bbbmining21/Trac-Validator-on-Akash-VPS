@@ -443,7 +443,7 @@ node msb.mjs run . store3
 |                | Trac Validator       |
 ---
 
-# ⚠️ Why is Persistent Storage added (Important)
+# Nice to know: ⚠️ Why is Persistent Storage added (Important)
 
 Akash containers are **ephemeral**:
 
