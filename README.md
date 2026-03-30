@@ -92,3 +92,9 @@ If you’re running a node long-term, Akash is worth trying.
 * more flexibility
 
 There’s a small learning curve, but once it’s running, it’s pretty straightforward.
+
+*If you have the courage and would like to run more than two nodes you will have to alter the according Dockerfile and entrypoint.sh, build and push those to your docker hub and alter the SDL so that it pulls your docker container. You can use the SetUp docs for two nodes as reference.*
+
+*[Two Hypermall AND Trac Mainnet nodes](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20TWO%20Hypermall%20AND%20Trac%20Mainnet%20validator%20nodes%20on%20Akash.md)*
+*OR*
+*[Two Hypermall nodes](https://github.com/bbbmining21/Trac-Validator-on-Akash-VPS/blob/main/SetUp%20Two%20Hypermall%20nodes%20on%20Akash%20with%20docker%20and%20Entrypoint.sh.md)*
