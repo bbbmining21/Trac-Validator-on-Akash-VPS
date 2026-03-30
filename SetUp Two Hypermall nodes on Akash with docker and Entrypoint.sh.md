@@ -283,8 +283,13 @@ tmux attach -t mall1
 ## 7️⃣ Summary
 
 ✅ Hypermall installed locally per user
+
 ✅ Nodes start automatically in correct directories
+
 ✅ Persistent storage ensures data survives redeploys
+
 ✅ Passwords configurable via SDL
+
 ✅ Auto-restart loop prevents downtime
+
 ✅ Fully Akash-compatible, production-ready container
