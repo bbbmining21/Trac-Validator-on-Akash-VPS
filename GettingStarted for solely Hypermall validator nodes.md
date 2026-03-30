@@ -232,6 +232,8 @@ USER2_PASSWORD=yourpassword
 
 * Click **Deploy**
 * Approve transaction
+* Choose your provider
+* After approving your choice and finalizing deployment
 * Wait ~2 minutes
 
 ---
