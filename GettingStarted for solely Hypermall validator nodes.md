@@ -418,7 +418,7 @@ node msb.mjs run . store1
 
 ---
 
-# ⚠️ Why is Persistent Storage added (Important)
+# Nice to know: ⚠️ Why is Persistent Storage added (Important)
 
 Akash containers are **ephemeral**:
 
