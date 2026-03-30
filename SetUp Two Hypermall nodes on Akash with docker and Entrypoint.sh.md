@@ -288,13 +288,3 @@ tmux attach -t mall1
 ✅ Passwords configurable via SDL
 ✅ Auto-restart loop prevents downtime
 ✅ Fully Akash-compatible, production-ready container
-
----
-
-If you want, we can next **upgrade this runtime** to:
-
-⭐ multi-user/multi-node dynamic scaling
-⭐ watchdog auto-restart for crashes
-⭐ auto Hypermall upgrades inside persistent storage
-
-This would make it a **true production-grade Akash validator runtime**.
