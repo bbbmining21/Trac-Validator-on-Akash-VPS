@@ -28,7 +28,9 @@ cd hypermall-runtime
 # 2️⃣ Dockerfile
 
 Create `Dockerfile`:
-
+```bash
+nano Dockerfile
+```
 ```dockerfile
 FROM ubuntu:22.04
 
@@ -80,7 +82,9 @@ ENTRYPOINT ["/entrypoint.sh"]
 # 3️⃣ Entrypoint script
 
 Create `entrypoint.sh`:
-
+```bash
+nano entrypoint.sh
+```
 ```bash
 #!/bin/bash
 set -e
